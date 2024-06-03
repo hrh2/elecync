@@ -1,7 +1,10 @@
 const express = require('express');
 const http = require('http');
 const socketIo = require('socket.io');
-require('dotenv').config()
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsdoc = require('swagger-jsdoc');
+require('dotenv').config();
+
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
@@ -40,7 +43,13 @@ app.post('/data', (req, res) => {
 app.get('/data', (req, res) => {
     res.json(dataStore);
 });
-PORT = process.env.PORT||5039
+
+// Swagger Options
+
+// const specs = swaggerJsdoc(require('./app.js'));
+app.use('/', swaggerUi.serve, swaggerUi.setup(require('./app')));
+
+const PORT = process.env.PORT || 5039;
 server.listen(PORT, () => {
-    console.log('Server is running on port 3000');
+    console.log(`Server is running on port ${PORT}`);
 });
