@@ -45,10 +45,10 @@ app.get('/data/:data', (req, res) => {
         const {data}= req.params;
         // Assuming newData is the sensor data
         dataStore.push(data);
-        console.log('New data received:', newData);
-        return res.status(201).send(newData);
+        console.log('New data received:', data);
+        return res.status(201).send(data);
     } catch (error) {
-        return res.status(500).json(error.message);
+        return res.status(500).send(error.message);
     }
 });
 
