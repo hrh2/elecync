@@ -53,7 +53,6 @@ app.post('/data', (req, res) => {
     try {
         const newData = req.body;
         // Assuming newData is the sensor data
-        
         dataStore.push(newData);
         console.log('New data received:', newData);
         io.emit('new_data', newData); // emit new_data event
