@@ -3,26 +3,33 @@ const http = require('http');
 const socketIo = require('socket.io');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
-const cors =require('cors')
+const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
 const io = socketIo(server, {
     cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
+        origin: "*",  // Allow all origins
+        methods: ["GET", "POST"],  // Allow GET and POST methods
         credentials: true
     }
 });
 
 let dataStore = [];
 
+// Enable CORS for all routes
+app.use(cors({
+    origin: "*",  // Allow all origins
+    methods: ["GET", "POST"],  // Allow GET and POST methods
+    credentials: true
+}));
+
 app.use(express.json());
-app.use(cors())
+
 io.on('connection', (socket) => {
     console.log('New client connected');
-    socket.emit('all',dataStore)
+    socket.emit('all', dataStore);
     socket.on('new_message', (new_data) => {
         dataStore.push(new_data);
     });
@@ -34,30 +41,27 @@ io.on('connection', (socket) => {
 
 // POST endpoint for posting data
 app.post('/data', (req, res) => {
-    try{
-    const newData = req.body;
-    // Assuming newData is the sensor data
-    dataStore.push(newData);
-    console.log('New data received:', newData);
-    return res.status(201).send(newData);
-    }catch(error){
-     return res.status(500).json(error.message)
+    try {
+        const newData = req.body;
+        // Assuming newData is the sensor data
+        dataStore.push(newData);
+        console.log('New data received:', newData);
+        return res.status(201).send(newData);
+    } catch (error) {
+        return res.status(500).json(error.message);
     }
 });
 
 // GET endpoint for retrieving data
-app.get('/data',async (req, res) => {
-    try{
+app.get('/data', async (req, res) => {
+    try {
         return res.json(dataStore);
-    }catch(error){
-        return res.status(500).json(error.message)
+    } catch (error) {
+        return res.status(500).json(error.message);
     }
-    
 });
 
 // Swagger Options
-
-// const specs = swaggerJsdoc(require('./app.js'));
 app.use('/', swaggerUi.serve, swaggerUi.setup(require('./app')));
 
 const PORT = process.env.PORT || 5039;
