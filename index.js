@@ -39,11 +39,6 @@ app.use('/meter',meterRoute)
 io.on('connection', (socket) => {
     console.log('New client connected');
     socket.emit('all', dataStore);
-    socket.on('new_message', (new_data) => {
-        dataStore.push(new_data);
-        // Emit the 'new_data' event with the received data
-        io.emit('new_data', new_data);
-    });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
@@ -52,14 +47,14 @@ io.on('connection', (socket) => {
 
 
 // POST endpoint for posting data
+// POST endpoint for posting data
 app.post('/data', (req, res) => {
     try {
         const newData = req.body;
         // Assuming newData is the sensor data
         dataStore.push(newData);
         console.log('New data received:', newData);
-        // Emit the 'new_data' event with the received data
-        io.emit('new_message', newData);
+        io.emit('new_data', newData); // emit new_data event
         return res.status(201).send(newData);
     } catch (error) {
         return res.status(500).json(error.message);
