@@ -4,6 +4,12 @@ const socketIo = require('socket.io');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
 const cors = require('cors');
+const connect = require('./db/connect')
+const signupRoute = require('./controllers/Signup')
+const loginRoute = require('./controllers/Login')
+const meterpRoute = require('./controllers/Meter')
+
+connect()
 require('dotenv').config();
 
 const app = express();
@@ -26,6 +32,9 @@ app.use(cors({
 }));
 
 app.use(express.json());
+app.use('/auth/signup',signupRoute)
+app.use('/auth/login',signupRoute)
+app.use('/meter',signupRoute)
 
 io.on('connection', (socket) => {
     console.log('New client connected');
@@ -63,7 +72,6 @@ app.get('/data', async (req, res) => {
 
 // Swagger Options
 app.use('/', swaggerUi.serve, swaggerUi.setup(require('./app')));
-
 const PORT = process.env.PORT || 5039;
 server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
