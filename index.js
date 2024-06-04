@@ -3,6 +3,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const swaggerUi = require('swagger-ui-express');
 const swaggerJsdoc = require('swagger-jsdoc');
+const cors =require('cors')
 require('dotenv').config();
 
 const app = express();
@@ -18,6 +19,7 @@ const io = socketIo(server, {
 let dataStore = [];
 
 app.use(express.json());
+app.use(cors())
 io.on('connection', (socket) => {
     console.log('New client connected');
     socket.emit('all',dataStore)
