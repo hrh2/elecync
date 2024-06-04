@@ -40,11 +40,11 @@ io.on('connection', (socket) => {
 });
 
 // POST endpoint for posting data
-app.post('/data', (req, res) => {
+app.get('/data/:data', (req, res) => {
     try {
-        const newData = req.body;
+        const {data}= req.params;
         // Assuming newData is the sensor data
-        dataStore.push(newData);
+        dataStore.push(data);
         console.log('New data received:', newData);
         return res.status(201).send(newData);
     } catch (error) {
