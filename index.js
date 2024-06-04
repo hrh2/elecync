@@ -53,8 +53,9 @@ app.post('/data', (req, res) => {
     try {
         const newData = req.body;
         // Assuming newData is the sensor data
-        dataStore.push(JSON.stringify(newData));
-        console.log('New data received:', JSON.stringify(newData));
+        
+        dataStore.push(newData);
+        console.log('New data received:', newData);
         io.emit('new_data', newData); // emit new_data event
         return res.status(201).send(newData);
     } catch (error) {
