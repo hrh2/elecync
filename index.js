@@ -41,12 +41,15 @@ io.on('connection', (socket) => {
     socket.emit('all', dataStore);
     socket.on('new_message', (new_data) => {
         dataStore.push(new_data);
+        // Emit the 'new_data' event with the received data
+        io.emit('new_data', new_data);
     });
 
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
 });
+
 
 // POST endpoint for posting data
 app.post('/data', (req, res) => {
@@ -55,11 +58,14 @@ app.post('/data', (req, res) => {
         // Assuming newData is the sensor data
         dataStore.push(newData);
         console.log('New data received:', newData);
+        // Emit the 'new_data' event with the received data
+        io.emit('new_data', newData);
         return res.status(201).send(newData);
     } catch (error) {
         return res.status(500).json(error.message);
     }
 });
+
 
 // GET endpoint for retrieving data
 app.get('/data', async (req, res) => {
