@@ -40,7 +40,7 @@ router.post('/', async (req, res) => {
                 process.env.JWT,
                 { expiresIn: '24h' } // Token expires in 1 hour
             );
-            return res.status(200).send({ token, message: 'Validation code sent. Check your email.' })
+            return res.status(200).send({ token, message: `Account created for ${user.lastName} ` })
     } catch (serverError) {
         return res.status(500).json({ message:serverError.message });
     }
