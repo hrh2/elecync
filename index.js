@@ -34,16 +34,25 @@ io.on('connection', (socket) => {
 
 // POST endpoint for posting data
 app.post('/data', (req, res) => {
+    try{
     const newData = req.body;
     // Assuming newData is the sensor data
     dataStore.push(newData);
     console.log('New data received:', newData);
-    res.status(201).send('Data received');
+    return res.status(201).send(newData);
+    }catch(error){
+     return res.status(500).json(error.message)
+    }
 });
 
 // GET endpoint for retrieving data
-app.get('/data', (req, res) => {
-    res.json(dataStore);
+app.get('/data',async (req, res) => {
+    try{
+        return res.json(dataStore);
+    }catch(error){
+        return res.status(500).json(error.message)
+    }
+    
 });
 
 // Swagger Options
