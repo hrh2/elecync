@@ -23,7 +23,7 @@ router.post('/', async (req, res) => {
       if (!validPassword) return res.status(401).send({ message: 'Invalid Email/Phone or Password' });
 
       const token = jwt.sign({ _id: user._id, email: user.email, phone: user.phone }, process.env.JWT);
-      res.status(200).send({ token: token,message:`${user.lastName} you have Successfully logged  in ` });
+      res.status(201).send({ token: token,message:`${user.lastName} you have Successfully logged  in ` });
    } catch (err) {
       res.status(500).send({ message: err.message });
    }

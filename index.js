@@ -7,7 +7,7 @@ const cors = require('cors');
 const connect = require('./db/connect')
 const signupRoute = require('./controllers/Signup')
 const loginRoute = require('./controllers/Login')
-const meterpRoute = require('./controllers/Meter')
+const meterRoute = require('./controllers/Meter')
 
 connect()
 require('dotenv').config();
@@ -33,8 +33,8 @@ app.use(cors({
 
 app.use(express.json());
 app.use('/auth/signup',signupRoute)
-app.use('/auth/login',signupRoute)
-app.use('/meter',signupRoute)
+app.use('/auth/login',loginRoute)
+app.use('/meter',meterRoute)
 
 io.on('connection', (socket) => {
     console.log('New client connected');
