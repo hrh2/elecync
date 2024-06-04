@@ -59,7 +59,7 @@ app.post('/data', (req, res) => {
         dataStore.push(newData);
         console.log('New data received:', newData);
         // Emit the 'new_data' event with the received data
-        io.emit('new_data', newData);
+        io.emit('new_message', newData);
         return res.status(201).send(newData);
     } catch (error) {
         return res.status(500).json(error.message);
